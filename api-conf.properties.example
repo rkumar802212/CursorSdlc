@@ -1,0 +1,19 @@
+# Copy to api-conf.properties and fill in values.
+# Never commit api-conf.properties (it is gitignored).
+
+# --- GitHub REST API ---
+github.baseUrl=https://api.github.com
+github.token=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
+github.owner=YOUR_ORG_OR_USER
+github.repo=YOUR_REPO
+# Optional: default base branch for PRs
+github.defaultBranch=main
+
+# --- Jira REST API ---
+# Cloud: https://your-domain.atlassian.net
+jira.baseUrl=https://your-domain.atlassian.net
+jira.email=your-email@example.com
+jira.apiToken=YOUR_JIRA_API_TOKEN
+jira.projectKey=PROJ
+# API version path used by clients (Cloud default)
+jira.apiPath=/rest/api/3
