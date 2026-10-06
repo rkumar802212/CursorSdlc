@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import re
 from datetime import date
 
 from flight_search.dates import get_today
 from flight_search.normalize import normalize_city
+
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+PAX_ERROR = "Passengers must be a whole number from 1 to 9."
 
 
 def validate_search(
@@ -39,23 +43,27 @@ def validate_search(
 
     pax_stripped = pax_raw.strip()
     if pax_stripped:
-        if not pax_stripped.isdigit():
-            errors.append("Passengers must be a whole number from 1 to 9.")
+        # str.isdigit() is true for some non-ASCII digits that int() rejects.
+        if not (pax_stripped.isascii() and pax_stripped.isdigit()):
+            errors.append(PAX_ERROR)
         else:
-            pax_value = int(pax_stripped)
+            pax_value = int(pax_stripped, 10)
             if pax_value < 1 or pax_value > 9:
-                errors.append("Passengers must be a whole number from 1 to 9.")
+                errors.append(PAX_ERROR)
 
     parsed_date: date | None = None
     date_stripped = date_raw.strip()
     if date_stripped:
-        try:
-            parsed_date = date.fromisoformat(date_stripped)
-        except ValueError:
+        if not ISO_DATE.fullmatch(date_stripped):
             errors.append("Travel date must be YYYY-MM-DD.")
         else:
-            if parsed_date < today_date:
-                errors.append("Travel date cannot be in the past.")
+            try:
+                parsed_date = date.fromisoformat(date_stripped)
+            except ValueError:
+                errors.append("Travel date must be YYYY-MM-DD.")
+            else:
+                if parsed_date < today_date:
+                    errors.append("Travel date cannot be in the past.")
 
     if dep.strip() and arr.strip():
         if normalize_city(dep) == normalize_city(arr):
