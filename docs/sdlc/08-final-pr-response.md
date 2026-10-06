@@ -34,7 +34,7 @@ Completed **Agentic SDLC Stage 8 (Final PR)** for Jira **KAN-1 (Search flight)**
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/8
 - **Title:** `[SDLC Stage 8] Final PR — KAN-1 Search flight`
 - **Branch:** `sdlc/stage-8-final-kan-1` → `main`
 
