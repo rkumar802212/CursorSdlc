@@ -78,7 +78,7 @@ def test_post_happy_path_delhi_mumbai(client):
         r'<div data-testid="validation-errors"[^>]*hidden',
         html,
     )
-    assert hidden_errors or ">validation-errors"  # present but empty/hidden
+    assert hidden_errors, "validation-errors must be hidden on a valid search"
     assert "6E-201" in html
     assert "AI-440" in html
 
@@ -167,6 +167,56 @@ def test_get_search_redirects_home(client):
     response = client.get("/search", follow_redirects=False)
     assert response.status_code == 302
     assert response.headers["Location"].endswith("/")
+
+
+def test_invalid_csrf_returns_generic_400(client):
+    response = client.post(
+        "/search",
+        data={
+            "csrf_token": "not-a-real-token",
+            "departure_city": "Delhi",
+            "arrival_city": "Mumbai",
+            "travel_date": "2099-06-15",
+            "passengers": "1",
+        },
+    )
+    assert response.status_code == 400
+    html = response.get_data(as_text=True)
+    assert "Traceback" not in html
+    assert "Bad request" in html
+    assert 'data-testid="results-list"' not in html
+
+
+def test_trimmed_cities_match_seed(client):
+    response = post_search(
+        client,
+        departure_city="  Delhi  ",
+        arrival_city=" mumbai",
+        travel_date="2099-06-15",
+        passengers="1",
+    )
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert has_testid(html, "results-list")
+    assert "6E-201" in html
+
+
+def test_http_non_integer_passengers(client):
+    response = post_search(
+        client,
+        departure_city="Delhi",
+        arrival_city="Mumbai",
+        travel_date="2099-06-15",
+        passengers="2.5",
+    )
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert has_testid(html, "validation-errors")
+    assert "hidden" not in re.search(
+        r'<div data-testid="validation-errors"[^>]*>', html
+    ).group(0)
+    assert 'data-testid="results-list"' not in html
+    assert 'data-testid="no-flights"' not in html
 
 
 def test_missing_csrf_returns_generic_400(client):
