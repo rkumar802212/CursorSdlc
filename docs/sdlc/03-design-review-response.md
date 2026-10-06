@@ -29,7 +29,7 @@ Completed a rigorous Design Review of the approved Flask architecture for **KAN-
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/3
 - **Title:** `[SDLC Stage 3] Design Review — KAN-1 Search flight`
 - **Branch:** `sdlc/stage-3-design-review-kan-1` → `main`
 
