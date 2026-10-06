@@ -1,14 +1,8 @@
-# Stage 1 Response Ã¢â‚¬â€ Requirements
-
-## Stage
-
-- **Stage:** 1 Ã¢â‚¬â€ Requirements
-- **Jira:** KAN-1 (Search flight)
-- **Status:** Complete Ã¢â‚¬â€ awaiting human approval before Stage 2 (Architecture)
+# Stage 1 Response — Requirements
 
 ## Summary
 
-Captured functional and non-functional requirements for an anonymous flight-search Python web app that queries dummy/mock flights. Clarifying questions were answered via human Ã¢â‚¬Å“ApprovedÃ¢â‚¬Â with documented sensible defaults (scope, result fields, matching, passengers, dates, auth, UX, delivery).
+Captured functional and non-functional requirements for Jira **KAN-1 (Search flight)**: an anonymous Python web app that searches dummy/mock flights by departure city, arrival city, travel date, and passenger count. Clarifying questions were closed by human **Approved** with documented sensible defaults.
 
 ## Artifacts
 
@@ -16,24 +10,32 @@ Captured functional and non-functional requirements for an anonymous flight-sear
 |----------|------|
 | Primary | `requirements.md` |
 | Stage response | `docs/sdlc/01-requirements-response.md` |
+| Supporting (repo bootstrap) | `.gitignore`, `README.md`, `api-conf.properties.example` |
 
-## Decisions locked in Stage 1
+## Key Decisions
 
-- Dummy/mock search only; no booking/payment/real airline APIs
-- Free-text cities; case-insensitive exact match on cities + date
-- Passengers 1Ã¢â‚¬â€œ9 display-only; past dates blocked; anonymous access
-- Python web app + Playwright E2E in Verify; framework deferred to Architecture
+- Dummy/mock search only; booking, payment, seat selection, and real airline APIs are out of scope
+- Free-text cities; case-insensitive exact match on departure city + arrival city + travel date
+- Passengers integer 1–9, display-only (no inventory/price impact)
+- Past dates blocked; same departure/arrival cities rejected; empty results show “No flights found”
+- Anonymous public search (no login)
+- Delivery: Python web application; Playwright E2E in Verify; framework choice deferred to Architecture
 
-## Security
+## Open Questions / Blockers
 
-- No secrets, tokens, or credentials written into requirements or this response
-- `api-conf.properties` remains local-only and must not be committed
+- None for Stage 1
+- Framework and dummy-data storage shape deferred to Stage 2 (Architecture)
 
 ## PR
 
 - **URL:** https://github.com/rkumar802212/CursorSdlc/pull/1
-- **Title pattern:** `[SDLC Stage 1] Requirements Ã¢â‚¬â€ KAN-1 Search flight`
+- **Title:** `[SDLC Stage 1] Requirements — KAN-1 Search flight`
+- **Branch:** `sdlc/stage-1-requirements-kan-1` → `main`
 
-## Human approval gate
+## Ready for Human Approval
 
-Please review `requirements.md` and reply **approved** / **proceed to architecture** (or request changes) before Stage 2 begins.
+**Yes.** Please review `requirements.md` and the Stage 1 PR, then reply **approved** / **proceed to architecture** (or request changes) before Stage 2 begins.
+
+### Security note
+
+No secrets were written into requirements or this response. `api-conf.properties` is gitignored and was verified absent from the PR branch.
