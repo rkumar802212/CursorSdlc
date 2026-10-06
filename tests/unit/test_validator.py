@@ -38,6 +38,10 @@ def test_passengers_reject_non_integer_and_range():
     )
     assert validate_search("Delhi", "Mumbai", "2099-06-15", "1", today=FIXED_TODAY) == []
     assert validate_search("Delhi", "Mumbai", "2099-06-15", "9", today=FIXED_TODAY) == []
+    unicode_digit = validate_search(
+        "Delhi", "Mumbai", "2099-06-15", "¹", today=FIXED_TODAY
+    )
+    assert any("Passengers" in e for e in unicode_digit)
 
 
 def test_today_allowed_yesterday_rejected():
@@ -54,3 +58,18 @@ def test_today_allowed_yesterday_rejected():
 def test_same_city_after_normalize():
     errors = validate_search("Delhi", "delhi", "2099-06-15", "1", today=FIXED_TODAY)
     assert any("different" in e.lower() for e in errors)
+
+
+def test_invalid_and_non_iso_dates():
+    compact = validate_search(
+        "Delhi", "Mumbai", "20990615", "1", today=FIXED_TODAY
+    )
+    assert any("YYYY-MM-DD" in e for e in compact)
+    slashes = validate_search(
+        "Delhi", "Mumbai", "2099/06/15", "1", today=FIXED_TODAY
+    )
+    assert any("YYYY-MM-DD" in e for e in slashes)
+    impossible = validate_search(
+        "Delhi", "Mumbai", "2099-02-31", "1", today=FIXED_TODAY
+    )
+    assert any("YYYY-MM-DD" in e for e in impossible)
