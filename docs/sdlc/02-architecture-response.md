@@ -27,7 +27,7 @@ Proposed a simple **Flask** Python web architecture for Jira **KAN-1 (Search fli
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/2
 - **Title:** `[SDLC Stage 2] Architecture — KAN-1 Search flight (Flask)`
 - **Branch:** `sdlc/stage-2-architecture-kan-1` → `main`
 
