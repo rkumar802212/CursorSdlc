@@ -1,0 +1,38 @@
+[
+  {
+    "airline": "IndiGo",
+    "flight_number": "6E-201",
+    "departure_city": "Delhi",
+    "arrival_city": "Mumbai",
+    "travel_date": "2099-06-15",
+    "departure_time": "06:15",
+    "arrival_time": "08:25",
+    "duration": "2h 10m",
+    "stops": 0,
+    "price": "₹4,999"
+  },
+  {
+    "airline": "Air India",
+    "flight_number": "AI-440",
+    "departure_city": "delhi",
+    "arrival_city": "MUMBAI",
+    "travel_date": "2099-06-15",
+    "departure_time": "14:40",
+    "arrival_time": "16:55",
+    "duration": "2h 15m",
+    "stops": 0,
+    "price": "₹6,250"
+  },
+  {
+    "airline": "SpiceJet",
+    "flight_number": "SG-8104",
+    "departure_city": "Bengaluru",
+    "arrival_city": "Chennai",
+    "travel_date": "2099-07-01",
+    "departure_time": "09:00",
+    "arrival_time": "10:10",
+    "duration": "1h 10m",
+    "stops": 0,
+    "price": "₹3,199"
+  }
+]

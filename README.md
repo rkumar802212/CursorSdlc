@@ -1,5 +1,43 @@
-# CursorSdlc
+# KAN-1 Search flight (Flask)
 
-Agentic SDLC capstone workspace for **KAN-1 — Search flight**.
+Python Flask web app for dummy flight search (Agentic SDLC Stage 5). No live airline APIs, booking, or authentication.
 
-Stage artifacts live under `docs/sdlc/`. Local API credentials go in `api-conf.properties` (gitignored); use `api-conf.properties.example` as the template.
+## Setup
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+copy .env.example .env
+```
+
+Set `SECRET_KEY` in `.env` to a local-only value. Never commit `.env`, `api-conf.properties`, or tokens.
+
+Catalog path: `data/flights.json` (loaded at process start). If the file is missing or malformed, the process **does not start** (no HTTP bind).
+
+## Run locally
+
+`debug` is always `False` on committed run paths.
+
+```powershell
+python -m flight_search
+```
+
+Equivalent WSGI object: `wsgi:app`.
+
+- Search form: http://127.0.0.1:5000/
+- Health (only after catalog load): http://127.0.0.1:5000/health → `{"status":"ok"}`
+
+## Tests (Stage 5)
+
+```powershell
+pytest
+```
+
+Runs unit and Flask test-client integration tests. Playwright E2E is **not** run here.
+
+## Playwright E2E (Stage 7)
+
+Placeholder scripts and locator contracts: `tests/e2e/README.md`.
+
+Stage 7 starts this app with `debug=False`, waits on `/health`, copies CSRF from `GET /`, and uses `data-testid="server-today"` for yesterday math. Seeded dates: `2099-06-15` (happy), `2099-12-31` (no results for Delhi→Kolkata).

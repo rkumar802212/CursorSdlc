@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search flights</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 1.5rem auto; max-width: 48rem; }
+      label { display: block; margin-top: 0.75rem; }
+      input { width: 100%; max-width: 20rem; }
+      button { margin-top: 1rem; }
+      .error { color: #8b0000; }
+      .card { border: 1px solid #ccc; padding: 0.75rem; margin: 0.5rem 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Search flights</h1>
+    <p>
+      Server date:
+      <time data-testid="server-today">{{ server_today }}</time>
+    </p>
+
+    <form data-testid="search-form" method="post" action="{{ url_for('main.search') }}">
+      {{ form.hidden_tag() }}
+
+      <label for="departure-city">Departure city</label>
+      <input
+        id="departure-city"
+        name="departure_city"
+        data-testid="departure-city"
+        value="{{ form.departure_city.data or '' }}"
+        autocomplete="off"
+      >
+
+      <label for="arrival-city">Arrival city</label>
+      <input
+        id="arrival-city"
+        name="arrival_city"
+        data-testid="arrival-city"
+        value="{{ form.arrival_city.data or '' }}"
+        autocomplete="off"
+      >
+
+      <label for="travel-date">Travel date</label>
+      <input
+        id="travel-date"
+        type="date"
+        name="travel_date"
+        data-testid="travel-date"
+        min="{{ server_today }}"
+        value="{{ form.travel_date.data or '' }}"
+      >
+
+      <label for="passengers">Passengers (1–9)</label>
+      <input
+        id="passengers"
+        name="passengers"
+        data-testid="passengers"
+        inputmode="numeric"
+        value="{{ form.passengers.data or '' }}"
+      >
+
+      <button type="submit" data-testid="search-submit">Search Flights</button>
+    </form>
+
+    {% if validation_errors %}
+    <div data-testid="validation-errors" class="error" role="alert">
+      <ul>
+        {% for message in validation_errors %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <div data-testid="validation-errors" hidden></div>
+    {% endif %}
+
+    {% if passenger_context is not none %}
+    <p data-testid="passenger-context">Passengers: {{ passenger_context }}</p>
+    {% endif %}
+
+    {% if flights %}
+    <div data-testid="results-list">
+      {% for flight in flights %}
+      <article class="card" data-testid="flight-card">
+        <div data-testid="result-airline">{{ flight.airline }}</div>
+        <div data-testid="result-flight-number">{{ flight.flight_number }}</div>
+        <div data-testid="result-departure-city">{{ flight.departure_city }}</div>
+        <div data-testid="result-arrival-city">{{ flight.arrival_city }}</div>
+        <div data-testid="result-departure-time">{{ flight.departure_time }}</div>
+        <div data-testid="result-arrival-time">{{ flight.arrival_time }}</div>
+        <div data-testid="result-duration">{{ flight.duration }}</div>
+        <div data-testid="result-stops">{{ flight.stops }}</div>
+        <div data-testid="result-price">{{ flight.price }}</div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if show_no_flights %}
+    <p data-testid="no-flights">No flights found</p>
+    {% endif %}
+  </body>
+</html>
