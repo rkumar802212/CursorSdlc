@@ -30,7 +30,7 @@ Completed **Agentic SDLC Stage 6** peer review of the KAN-1 Flask search app. Ev
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/6
 - **Title:** `[SDLC Stage 6] Code Review — KAN-1 Flask search`
 - **Branch:** `sdlc/stage-6-code-review-kan-1` → `main`
 
