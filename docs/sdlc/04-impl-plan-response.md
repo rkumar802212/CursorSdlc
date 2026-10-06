@@ -28,7 +28,7 @@ Produced a dependency-ordered **implementation plan** for Jira **KAN-1 (Search f
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/4
 - **Title:** `[SDLC Stage 4] Implementation Planning — KAN-1 Search flight`
 - **Branch:** `sdlc/stage-4-impl-plan-kan-1` → `main`
 
