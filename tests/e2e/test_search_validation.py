@@ -1,23 +1,79 @@
-"""Stage 7 Playwright MCP placeholder — validation.
+"""Playwright E2E — validation errors (same city, past date, missing, pax)."""
 
-Do not execute this module in Stage 5.
+from __future__ import annotations
 
-Cases (all POST /search with CSRF from GET /):
-- Same city: Delhi / delhi — validation-errors visible; results-list and
-  no-flights not in DOM; passenger-context not in DOM
-- Yesterday: derive from data-testid=server-today minus one day (server local)
-- Missing required fields
-- Passengers outside 1–9 (0, 10, 2.5)
+from playwright.sync_api import Page, expect
 
-Start Flask with debug=False; wait until GET /health returns {"status":"ok"}.
-"""
+from tests.e2e.helpers import (
+    assert_validation_visible,
+    fill_search,
+    open_home,
+    submit_search,
+    yesterday_iso,
+)
 
 import pytest
 
-pytestmark = pytest.mark.skip(
-    reason="Stage 7 Playwright MCP — not executed in Stage 5"
-)
+pytestmark = pytest.mark.e2e
 
 
-def test_search_validation_placeholder():
-    assert False, "Implemented and run in Stage 7"
+def test_same_city_shows_validation(page: Page, e2e_base_url: str):
+    open_home(page, e2e_base_url)
+    fill_search(
+        page,
+        departure="Delhi",
+        arrival="delhi",
+        travel_date="2099-06-15",
+        passengers="1",
+    )
+    submit_search(page)
+    assert_validation_visible(page)
+    expect(page.locator('[data-testid="validation-errors"]')).to_contain_text(
+        "different", ignore_case=True
+    )
+
+
+def test_past_date_from_server_today(page: Page, e2e_base_url: str):
+    open_home(page, e2e_base_url)
+    past = yesterday_iso(page)
+    fill_search(
+        page,
+        departure="Delhi",
+        arrival="Mumbai",
+        travel_date=past,
+        passengers="1",
+        bypass_date_min=True,
+    )
+    submit_search(page)
+    assert_validation_visible(page)
+    expect(page.locator('[data-testid="validation-errors"]')).to_contain_text(
+        "past", ignore_case=True
+    )
+
+
+def test_missing_required_fields(page: Page, e2e_base_url: str):
+    open_home(page, e2e_base_url)
+    fill_search(
+        page,
+        departure="",
+        arrival="",
+        travel_date="",
+        passengers="",
+    )
+    submit_search(page)
+    assert_validation_visible(page)
+
+
+def test_passengers_outside_range(page: Page, e2e_base_url: str):
+    open_home(page, e2e_base_url)
+    for pax in ("0", "10", "2.5"):
+        fill_search(
+            page,
+            departure="Delhi",
+            arrival="Mumbai",
+            travel_date="2099-06-15",
+            passengers=pax,
+        )
+        submit_search(page)
+        assert_validation_visible(page)
+        open_home(page, e2e_base_url)

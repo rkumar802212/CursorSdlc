@@ -28,16 +28,20 @@ Equivalent WSGI object: `wsgi:app`.
 - Search form: http://127.0.0.1:5000/
 - Health (only after catalog load): http://127.0.0.1:5000/health → `{"status":"ok"}`
 
-## Tests (Stage 5)
+## Tests
+
+Unit and Flask test-client integration:
 
 ```powershell
 pytest
 ```
 
-Runs unit and Flask test-client integration tests. Playwright E2E is **not** run here.
+Playwright E2E (Stage 7) — does not run with default `pytest`:
 
-## Playwright E2E (Stage 7)
+```powershell
+pip install -r requirements-e2e.txt
+python -m playwright install chromium
+pytest -c pytest-e2e.ini
+```
 
-Placeholder scripts and locator contracts: `tests/e2e/README.md`.
-
-Stage 7 starts this app with `debug=False`, waits on `/health`, copies CSRF from `GET /`, and uses `data-testid="server-today"` for yesterday math. Seeded dates: `2099-06-15` (happy), `2099-12-31` (no results for Delhi→Kolkata).
+See `tests/e2e/README.md`. Scripts start `python -m flight_search` (`debug=False`) unless `E2E_BASE_URL` already returns `{"status":"ok"}` on `/health`. CSRF is taken from `GET /`. Past dates use `data-testid="server-today"`. Seeded dates: `2099-06-15` (happy), `2099-12-31` (no results for Delhi→Kolkata).

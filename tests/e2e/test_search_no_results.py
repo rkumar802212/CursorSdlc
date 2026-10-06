@@ -1,21 +1,24 @@
-"""Stage 7 Playwright MCP placeholder — zero matches.
+"""Playwright E2E — valid search with zero catalog matches."""
 
-Do not execute this module in Stage 5.
+from __future__ import annotations
 
-Submit Delhi + Kolkata + 2099-12-31 (valid search; no catalog row).
-Assert no-flights visible, results-list not in DOM, passenger-context present,
-validation-errors hidden/empty.
+from playwright.sync_api import Page
 
-Start: python -m flight_search (SECRET_KEY set, debug=False).
-Wait: GET /health == {"status":"ok"} after catalog load.
-"""
+from tests.e2e.helpers import assert_no_flights, fill_search, open_home, submit_search
 
 import pytest
 
-pytestmark = pytest.mark.skip(
-    reason="Stage 7 Playwright MCP — not executed in Stage 5"
-)
+pytestmark = pytest.mark.e2e
 
 
-def test_search_no_results_placeholder():
-    assert False, "Implemented and run in Stage 7"
+def test_search_delhi_kolkata_no_flights(page: Page, e2e_base_url: str):
+    open_home(page, e2e_base_url)
+    fill_search(
+        page,
+        departure="Delhi",
+        arrival="Kolkata",
+        travel_date="2099-12-31",
+        passengers="1",
+    )
+    submit_search(page)
+    assert_no_flights(page, passengers="1")
