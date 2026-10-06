@@ -36,7 +36,7 @@ Completed **Agentic SDLC Stage 7 (Verify)** for Jira **KAN-1 (Search flight)**. 
 
 ## PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/7
 - **Title:** `[SDLC Stage 7] Verify — Playwright E2E + pytest KAN-1`
 - **Branch:** `sdlc/stage-7-verify-kan-1` → `main` (from Stage 6 head)
 

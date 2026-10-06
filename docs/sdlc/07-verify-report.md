@@ -84,4 +84,4 @@ Rationale: acceptance criteria are met by pytest + Playwright E2E; critical pass
 
 ## Stage PR
 
-- **URL:** pending
+- **URL:** https://github.com/rkumar802212/CursorSdlc/pull/7
