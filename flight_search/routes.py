@@ -15,7 +15,7 @@ from flask_wtf.csrf import CSRFError
 
 from flight_search.dates import today_iso
 from flight_search.forms import SearchForm
-from flight_search.safe_log import log_exception
+from flight_search.safe_log import log_event, log_exception
 from flight_search.validator import parse_passengers, validate_search
 
 bp = Blueprint("main", __name__)
@@ -62,11 +62,12 @@ def search():
 
     try:
         passengers = parse_passengers(form.passengers.data)
+        travel_date = (form.travel_date.data or "").strip()
         repo = current_app.extensions["flights"]
         results = repo.search(
-            form.departure_city.data,
-            form.arrival_city.data,
-            form.travel_date.data.strip(),
+            form.departure_city.data or "",
+            form.arrival_city.data or "",
+            travel_date,
             passengers=passengers,
         )
     except Exception as exc:  # noqa: BLE001 — unexpected errors become generic 500
@@ -102,7 +103,7 @@ def health():
 def register_error_handlers(app):
     @app.errorhandler(CSRFError)
     def handle_csrf(err):
-        log_exception("csrf_failed", err)
+        log_event(f"csrf_failed: {type(err).__name__}")
         return render_template("errors/400.html"), 400
 
     @app.errorhandler(404)
